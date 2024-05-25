@@ -1,0 +1,9 @@
+Monitorización de red durante la transmisión de datos
+Script (network_monitor.sh):
+#!/bin/bash
+
+# Monitorizar red y guardar en un log
+log_file="/home/user/network_log_$(date +'%Y%m%d_%H%M%S').txt"
+
+# Capturar tráfico de red durante 5 segundos
+sudo tcpdump -i eth0 -w $log_file -G 5

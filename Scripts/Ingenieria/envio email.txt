@@ -1,0 +1,6 @@
+Envío de e-mail con programa de trabajo (Ingeniería - Opcional)
+Script (send_email.sh):
+#!/bin/bash
+
+# Enviar e-mail con archivo adjunto
+echo "Programa de trabajo para hoy" | mail -s "Programa de Trabajo" -a /path/to/attachment.txt email@example.com

@@ -1,0 +1,6 @@
+Apagado automático de equipos (Ingeniería)
+Script (shutdown.sh):
+#!/bin/bash
+
+# Apagar equipo
+sudo shutdown -h now

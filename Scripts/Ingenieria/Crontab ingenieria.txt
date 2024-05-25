@@ -1,0 +1,39 @@
+Crontab:
+# Crontab para Ingeniería
+
+# Permitir acceso a Internet a las 8:00 AM
+0 8 * * * sudo /home/oficina/Scripts/iptables_rules.sh allow
+
+# Bloquear acceso a Internet a las 9:30 AM
+30 9 * * * sudo /home/oficina/Scripts/iptables_rules.sh block
+
+# Enviar e-mail a las 9:30 AM (Opcional)
+30 9 * * * sudo /home/oficina/Scripts/send_email.sh
+
+# Permitir conexión entre dispositivos a las 9:30 AM
+30 9 * * * sudo /home/oficina/Scripts/network_connection.sh enable
+
+# Bloquear conexión entre dispositivos a las 10:30 AM
+30 10 * * * sudo /home/oficina/Scripts/network_connection.sh disable
+
+# Permitir acceso a Internet a las 11:00 AM
+0 11 * * * sudo /home/oficina/Scripts/iptables_rules.sh allow
+
+# Bloquear acceso a Internet a las 12:00 PM
+0 12 * * * sudo /home/oficina/Scripts/iptables_rules.sh block
+
+# Permitir acceso a Internet a las 13:00 PM
+0 13 * * * sudo /home/oficina/Scripts/iptables_rules.sh allow
+
+# Bloquear acceso a Internet a las 14:00 PM
+0 14 * * * sudo /home/oficina/Scripts/iptables_rules.sh block
+
+# Permitir conexión entre dispositivos a las 18:00 PM
+0 18 * * * sudo /home/oficina/Scripts/network_connection.sh enable
+
+# Bloquear conexión entre dispositivos a las 19:00 PM
+0 19 * * * sudo /home/oficina/Scripts/network_connection.sh disable
+
+# Apagar equipo a las 18:30 PM
+30 18 * * * sudo /home/oficina/Scripts/shutdown.sh
+

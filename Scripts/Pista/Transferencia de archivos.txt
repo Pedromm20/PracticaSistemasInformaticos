@@ -1,0 +1,6 @@
+Transferencia de datos desde pista a oficina de ingeniería
+Script (download_file.sh):
+#!/bin/bash
+
+# Descargar archivo
+wget -O /home/user/downloaded_file.txt http://example.com/sample.txt

@@ -1,0 +1,30 @@
+Restricción de horarios de acceso a Internet (Ingeniería)
+Script (iptables_rules.sh):
+#!/bin/bash
+
+# Bloquear acceso a Internet
+block_internet() {
+ iptables -A OUTPUT -p tcp --dport 80 -j DROP
+ iptables -A OUTPUT -p tcp --dport 443 -j DROP
+ iptables -A OUTPUT -p udp --dport 53 -j DROP
+}
+
+# Permitir acceso a Internet
+allow_internet() {
+ iptables -D OUTPUT -p tcp --dport 80 -j DROP
+ iptables -D OUTPUT -p tcp --dport 443 -j DROP
+ iptables -D OUTPUT -p udp --dport 53 -j DROP
+}
+
+case "$1" in
+ block)
+ block_internet
+ ;;
+ allow)
+ allow_internet
+ ;;
+ *)
+ echo "Usage: $0 {block|allow}"
+ exit 1
+ ;;
+esac

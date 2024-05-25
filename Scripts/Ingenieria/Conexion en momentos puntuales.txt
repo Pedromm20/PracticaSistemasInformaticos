@@ -1,0 +1,28 @@
+Conexión entre dispositivos en momentos puntuales (Ingeniería)
+Script (network_connection.sh):
+#!/bin/bash
+
+# Permitir conexión entre dispositivos
+enable_connection() {
+ iptables -A FORWARD -s 192.168.1.0/24 -d 192.168.2.0/24 -j ACCEPT
+ iptables -A FORWARD -s 192.168.2.0/24 -d 192.168.1.0/24 -j ACCEPT
+}
+
+# Bloquear conexión entre dispositivos
+disable_connection() {
+ iptables -D FORWARD -s 192.168.1.0/24 -d 192.168.2.0/24 -j ACCEPT
+ iptables -D FORWARD -s 192.168.2.0/24 -d 192.168.1.0/24 -j ACCEPT
+}
+
+case "$1" in
+ enable)
+ enable_connection
+ ;;
+ disable)
+ disable_connection
+ ;;
+ *)
+ echo "Usage: $0 {enable|disable}"
+ exit 1
+ ;;
+esac
