@@ -1,0 +1,115 @@
+Máquina Virtual "Oficina":
+
+#!/bin/bash
+
+# Función para bloquear acceso a Internet
+block_internet() {
+    iptables -A OUTPUT -p tcp --dport 80 -j DROP
+    iptables -A OUTPUT -p tcp --dport 443 -j DROP
+    iptables -A OUTPUT -p udp --dport 53 -j DROP
+}
+
+# Función para permitir acceso a Internet
+allow_internet() {
+    iptables -D OUTPUT -p tcp --dport 80 -j DROP
+    iptables -D OUTPUT -p tcp --dport 443 -j DROP
+    iptables -D OUTPUT -p udp --dport 53 -j DROP
+}
+
+# Función para permitir conexión entre dispositivos
+enable_connection() {
+    iptables -A FORWARD -s 192.168.1.0/24 -d 192.168.2.0/24 -j ACCEPT
+    iptables -A FORWARD -s 192.168.2.0/24 -d 192.168.1.0/24 -j ACCEPT
+}
+
+# Función para bloquear conexión entre dispositivos
+disable_connection() {
+    iptables -D FORWARD -s 192.168.1.0/24 -d 192.168.2.0/24 -j ACCEPT
+    iptables -D FORWARD -s 192.168.2.0/24 -d 192.168.1.0/24 -j ACCEPT
+}
+
+# Función para apagar el equipo
+shutdown_system() {
+    sudo shutdown -h now
+}
+
+# Función para enviar email
+send_email() {
+    echo "Programa de trabajo para hoy" | mail -s "Programa de Trabajo" -a /path/to/attachment.txt email@example.com
+}
+
+# Función principal para ejecutar tareas según el horario
+execute_task() {
+    current_time=$(date +%H%M)
+
+    case "$current_time" in
+        "0800") allow_internet ;;
+        "0930") block_internet; send_email; enable_connection ;;
+        "1030") disable_connection ;;
+        "1100") allow_internet ;;
+        "1200") block_internet ;;
+        "1300") allow_internet ;;
+        "1400") block_internet ;;
+        "1800") enable_connection ;;
+        "1900") disable_connection ;;
+        "1830") shutdown_system ;;
+    esac
+}
+
+# Ejecutar la tarea principal
+execute_task
+
+
+* * * * * sudo bash /home/ingenieria/Scripts/engineering_script.sh
+
+
+Script maquina "Pista"
+
+#!/bin/bash
+
+# Ruta del archivo grande
+LARGE_FILE="/home/pista/largefile.img"
+
+# Función para crear un archivo grande en /home/pista (solo si no existe)
+create_large_file() {
+    if [[ ! -f "$LARGE_FILE" ]]; then
+        dd if=/dev/zero of="$LARGE_FILE" bs=1M count=1024
+    fi
+}
+
+# Función para transferir archivo a la máquina de ingeniería
+transfer_file() {
+    # Crear el directorio .ssh si no existe
+    sudo -u pista mkdir -p /home/pista/.ssh
+    # Añadir la clave del host de la máquina de oficina a known_hosts
+    sudo -u pista ssh-keyscan -H 192.168.1.24 >> /home/pista/.ssh/known_hosts
+    # Transferir el archivo
+    sudo -u pista sshpass -p "1234" scp "$LARGE_FILE" oficina@192.168.1.24:/home/oficina/largefile.img
+}
+
+# Función para monitorear red
+network_monitor() {
+    log_file="/home/pista/network_log.txt"
+    echo "Network log entry at $(date)" >> "$log_file"
+}
+
+# Función principal para ejecutar tareas según el horario
+execute_task() {
+    current_time=$(date +%H%M)
+
+    if [[ "$current_time" == "1200" ]]; then
+        create_large_file
+        transfer_file
+    fi
+
+    for monitor_time in 1205 1210 1215 1220 1225; do
+        if [[ "$current_time" == "$monitor_time" ]]; then
+            network_monitor
+        fi
+    done
+}
+
+# Ejecutar la tarea principal
+execute_task
+
+* * * * * sudo bash /home/pista/Scripts/pista_script.sh
